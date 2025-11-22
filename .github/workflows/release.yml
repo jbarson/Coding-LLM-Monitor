@@ -170,8 +170,4 @@ jobs:
             release-assets/coding-llm-monitor-macos
             release-assets/coding-llm-monitor-windows.exe
           fail_on_unmatched_files: false
-          files: |
-            release-assets/coding-llm-monitor-linux
-            release-assets/coding-llm-monitor-macos
-            release-assets/coding-llm-monitor-windows.exe
 
