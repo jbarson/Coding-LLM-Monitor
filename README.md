@@ -20,13 +20,25 @@ A terminal-based dashboard for monitoring the status of code assistant services 
 
 ## Quick Start
 
-### Option 1: Run the Executable (Recommended)
+### Option 1: Install via Homebrew (macOS/Linux - Recommended)
 
-1. Download the `coding-llm-monitor` executable (or `coding-llm-monitor.exe` on Windows)
-2. Open Terminal/Command Prompt
-3. Run: `./coding-llm-monitor` (macOS/Linux) or `coding-llm-monitor.exe` (Windows)
+```bash
+brew tap jbarson/coding-llm-monitor
+brew install coding-llm-monitor
+```
 
-### Option 2: Run from Source
+Then run:
+```bash
+coding-llm-monitor
+```
+
+### Option 2: Download the Executable
+
+1. Download the `coding-llm-monitor` executable from the [latest release](https://github.com/jbarson/Coding-LLM-Monitor/releases/latest)
+2. Make it executable: `chmod +x coding-llm-monitor-macos` (or `coding-llm-monitor-linux`)
+3. Run: `./coding-llm-monitor-macos` (macOS) or `./coding-llm-monitor-linux` (Linux)
+
+### Option 3: Run from Source
 
 ```bash
 # 1. Create virtual environment
