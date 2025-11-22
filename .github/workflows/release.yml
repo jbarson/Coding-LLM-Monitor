@@ -1,0 +1,150 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Triggers on version tags like v1.0.0, v1.2.3, etc.
+
+jobs:
+  build-and-release:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            artifact_name: coding-llm-monitor-linux
+            executable_name: coding-llm-monitor
+          - os: macos-latest
+            artifact_name: coding-llm-monitor-macos
+            executable_name: coding-llm-monitor
+          - os: windows-latest
+            artifact_name: coding-llm-monitor-windows
+            executable_name: coding-llm-monitor.exe
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION"
+          echo "Tag: ${GITHUB_REF#refs/tags/}"
+
+      - name: Install build dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-build.txt
+          pip install -r requirements.txt
+
+      - name: Build executable (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: |
+          chmod +x build.sh
+          ./build.sh
+
+      - name: Build executable (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          build.bat
+
+      - name: Prepare artifact
+        shell: bash
+        run: |
+          if [ "${{ runner.os }}" == "Linux" ] || [ "${{ runner.os }}" == "macOS" ]; then
+            cp dist/coding-llm-monitor dist/${{ matrix.artifact_name }}
+          else
+            copy dist\coding-llm-monitor.exe dist\${{ matrix.artifact_name }}.exe
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: |
+            dist/${{ matrix.artifact_name }}*
+            dist/coding-llm-monitor*
+          if-no-files-found: error
+
+  create-release:
+    needs: build-and-release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Prepare release files
+        run: |
+          mkdir -p release-assets
+          # Find and copy the executables
+          find artifacts -name "coding-llm-monitor-linux" -exec cp {} release-assets/ \;
+          find artifacts -name "coding-llm-monitor-macos" -exec cp {} release-assets/ \;
+          find artifacts -name "coding-llm-monitor-windows.exe" -exec cp {} release-assets/ \;
+          ls -lh release-assets/
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: Release ${{ steps.version.outputs.tag }}
+          body: |
+            ## 🎉 Release ${{ steps.version.outputs.tag }}
+
+            ### 📦 Downloads
+
+            Download the executable for your platform:
+            - **Linux**: `coding-llm-monitor-linux`
+            - **macOS**: `coding-llm-monitor-macos`
+            - **Windows**: `coding-llm-monitor-windows.exe`
+
+            ### 🚀 Quick Start
+
+            **Linux/macOS:**
+            ```bash
+            chmod +x coding-llm-monitor-*
+            ./coding-llm-monitor-*
+            ```
+
+            **Windows:**
+            ```cmd
+            coding-llm-monitor-windows.exe
+            ```
+
+            ### 📝 Full Documentation
+
+            See [README.md](https://github.com/${{ github.repository }}/blob/${{ steps.version.outputs.tag }}/README.md) for complete documentation.
+
+          draft: false
+          prerelease: false
+          files: |
+            release-assets/coding-llm-monitor-linux
+            release-assets/coding-llm-monitor-macos
+            release-assets/coding-llm-monitor-windows.exe
+
