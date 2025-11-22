@@ -23,11 +23,26 @@ pip install -q -r requirements.txt
 echo "Building executable with PyInstaller..."
 pyinstaller status.spec --clean
 
+# Detect OS and create platform-specific binary name
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    PLATFORM_NAME="coding-llm-monitor-macos"
+elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    PLATFORM_NAME="coding-llm-monitor-linux"
+else
+    PLATFORM_NAME="coding-llm-monitor"
+fi
+
+# Copy to platform-specific name
+cp dist/coding-llm-monitor "dist/${PLATFORM_NAME}"
+chmod +x "dist/${PLATFORM_NAME}"
+
 echo ""
-echo "Build complete! Executable is in: dist/coding-llm-monitor"
+echo "Build complete! Executables available:"
+echo "  - dist/coding-llm-monitor (generic name)"
+echo "  - dist/${PLATFORM_NAME} (platform-specific name)"
 echo ""
 echo "To test the executable:"
 echo "  ./dist/coding-llm-monitor"
 echo ""
-echo "To distribute, copy the 'coding-llm-monitor' file from dist/ to your target system."
+echo "To distribute, copy the '${PLATFORM_NAME}' file from dist/ to your target system."
 

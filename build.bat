@@ -21,13 +21,18 @@ REM Build the executable
 echo Building executable with PyInstaller...
 pyinstaller status.spec --clean
 
+REM Copy to platform-specific name
+copy dist\coding-llm-monitor.exe dist\coding-llm-monitor-windows.exe
+
 echo.
-echo Build complete! Executable is in: dist\coding-llm-monitor.exe
+echo Build complete! Executables available:
+echo   - dist\coding-llm-monitor.exe (generic name)
+echo   - dist\coding-llm-monitor-windows.exe (platform-specific name)
 echo.
 echo To test the executable:
 echo   dist\coding-llm-monitor.exe
 echo.
-echo To distribute, copy the 'coding-llm-monitor.exe' file from dist\ to your target system.
+echo To distribute, copy the 'coding-llm-monitor-windows.exe' file from dist\ to your target system.
 
 pause
 

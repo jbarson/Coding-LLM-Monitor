@@ -64,11 +64,16 @@ jobs:
         shell: bash
         run: |
           if [ "${{ runner.os }}" == "Linux" ] || [ "${{ runner.os }}" == "macOS" ]; then
+            # Copy to platform-specific name
             cp dist/coding-llm-monitor dist/${{ matrix.artifact_name }}
+            chmod +x dist/${{ matrix.artifact_name }}
+            echo "Created: dist/${{ matrix.artifact_name }}"
           else
-            # Windows: use PowerShell-compatible copy command
+            # Windows: copy to platform-specific name
             cp dist/coding-llm-monitor.exe dist/${{ matrix.artifact_name }}.exe
+            echo "Created: dist/${{ matrix.artifact_name }}.exe"
           fi
+          ls -lh dist/
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
