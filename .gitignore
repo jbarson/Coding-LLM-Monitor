@@ -45,3 +45,11 @@ build/
 dist/
 *.spec.bak
 
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+*.cover
+
