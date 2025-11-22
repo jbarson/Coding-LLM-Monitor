@@ -336,7 +336,8 @@ async def fetch_status(session: aiohttp.ClientSession, service: dict) -> StatusR
                 return StatusResult(service_name, get_status_emoji(STATUS_ERROR), STATUS_ERROR, status_url)
 
     except aiohttp.ClientConnectorError as e:
-        logger.error(f"{service_name}: Connection error - {e}")
+        error_msg = str(e) if e else "Connection error"
+        logger.error(f"{service_name}: Connection error - {error_msg}")
         return StatusResult(service_name, get_status_emoji(STATUS_ERROR), STATUS_ERROR, status_url)
     except asyncio.TimeoutError:
         logger.error(f"{service_name}: Request timeout after {REQUEST_TIMEOUT}s")
