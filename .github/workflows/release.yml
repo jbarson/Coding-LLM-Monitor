@@ -34,6 +34,7 @@ jobs:
 
       - name: Extract version from tag
         id: version
+        shell: bash
         run: |
           VERSION=${GITHUB_REF#refs/tags/v}
           echo "version=$VERSION" >> $GITHUB_OUTPUT
@@ -55,6 +56,7 @@ jobs:
 
       - name: Build executable (Windows)
         if: runner.os == 'Windows'
+        shell: cmd
         run: |
           build.bat
 
@@ -64,7 +66,8 @@ jobs:
           if [ "${{ runner.os }}" == "Linux" ] || [ "${{ runner.os }}" == "macOS" ]; then
             cp dist/coding-llm-monitor dist/${{ matrix.artifact_name }}
           else
-            copy dist\coding-llm-monitor.exe dist\${{ matrix.artifact_name }}.exe
+            # Windows: use PowerShell-compatible copy command
+            cp dist/coding-llm-monitor.exe dist/${{ matrix.artifact_name }}.exe
           fi
 
       - name: Upload artifact
