@@ -5,29 +5,19 @@
 class CodingLlmMonitor < Formula
   desc "Terminal-based dashboard for monitoring code assistant services"
   homepage "https://github.com/jbarson/Coding-LLM-Monitor"
-  version "1.0.0"
+  version "1.0.9"
   license "MIT"
 
   on_macos do
-    if Hardware::CPU.intel?
-      url "https://github.com/jbarson/Coding-LLM-Monitor/releases/download/v1.0.0/coding-llm-monitor-macos"
-      sha256 "PLACEHOLDER_SHA256_INTEL"
-    end
-    if Hardware::CPU.arm?
-      url "https://github.com/jbarson/Coding-LLM-Monitor/releases/download/v1.0.0/coding-llm-monitor-macos"
-      sha256 "PLACEHOLDER_SHA256_ARM"
-    end
+    # macOS binaries are universal (work on both Intel and ARM)
+    url "https://github.com/jbarson/Coding-LLM-Monitor/releases/download/v1.0.9/coding-llm-monitor-macos"
+    sha256 "ec75c0ce26c7cfd7b1bde4e51d9faa869e366802428e729beb3e57fdb4ade812"
   end
 
   on_linux do
-    if Hardware::CPU.intel?
-      url "https://github.com/jbarson/Coding-LLM-Monitor/releases/download/v1.0.0/coding-llm-monitor-linux"
-      sha256 "PLACEHOLDER_SHA256_LINUX_INTEL"
-    end
-    if Hardware::CPU.arm?
-      url "https://github.com/jbarson/Coding-LLM-Monitor/releases/download/v1.0.0/coding-llm-monitor-linux"
-      sha256 "PLACEHOLDER_SHA256_LINUX_ARM"
-    end
+    # Linux binaries work on both Intel and ARM
+    url "https://github.com/jbarson/Coding-LLM-Monitor/releases/download/v1.0.9/coding-llm-monitor-linux"
+    sha256 "24fa2a965e63a3015a2f7e29eae128cce50c8d329d4091a43609d56c090c5684"
   end
 
   def install
