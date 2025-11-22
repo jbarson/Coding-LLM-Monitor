@@ -170,40 +170,6 @@ jobs:
             release-assets/coding-llm-monitor-macos
             release-assets/coding-llm-monitor-windows.exe
           fail_on_unmatched_files: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.version.outputs.tag }}
-          name: Release ${{ steps.version.outputs.tag }}
-          body: |
-            ## 🎉 Release ${{ steps.version.outputs.tag }}
-
-            ### 📦 Downloads
-
-            Download the executable for your platform:
-            - **Linux**: `coding-llm-monitor-linux`
-            - **macOS**: `coding-llm-monitor-macos`
-            - **Windows**: `coding-llm-monitor-windows.exe`
-
-            ### 🚀 Quick Start
-
-            **Linux/macOS:**
-            ```bash
-            chmod +x coding-llm-monitor-*
-            ./coding-llm-monitor-*
-            ```
-
-            **Windows:**
-            ```cmd
-            coding-llm-monitor-windows.exe
-            ```
-
-            ### 📝 Full Documentation
-
-            See [README.md](https://github.com/${{ github.repository }}/blob/${{ steps.version.outputs.tag }}/README.md) for complete documentation.
-
-          draft: false
-          prerelease: false
           files: |
             release-assets/coding-llm-monitor-linux
             release-assets/coding-llm-monitor-macos
