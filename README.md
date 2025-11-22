@@ -69,10 +69,28 @@ See `DISTRIBUTION.md` for detailed build instructions.
 - 🔧 **Cyan**: Maintenance
 - ❓ **Grey**: Unknown
 
+## Testing
+
+This project includes a comprehensive test suite with 59 tests covering all major functionality.
+
+```bash
+# Install test dependencies
+pip install -r requirements-test.txt
+
+# Run all tests
+pytest
+
+# Run with coverage report
+pytest --cov=status --cov-report=html
+```
+
+See `TESTING.md` for detailed testing documentation.
+
 ## Documentation
 
 - `QUICK_START.md` - Quick start guide for users
 - `DISTRIBUTION.md` - Guide for building and distributing executables
+- `TESTING.md` - Testing guide and documentation
 
 ## Requirements
 
@@ -81,4 +99,14 @@ See `DISTRIBUTION.md` for detailed build instructions.
 
 ## License
 
-This project is provided as-is for personal use.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+## Acknowledgments
+
+- Built with [Rich](https://github.com/Textualize/rich) for beautiful terminal UI
+- Uses [aiohttp](https://github.com/aio-libs/aiohttp) for async HTTP requests
+- Status page data from various service providers
